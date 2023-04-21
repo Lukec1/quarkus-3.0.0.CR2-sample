@@ -1,0 +1,33 @@
+quarkus:
+  application:
+    name: zoo-service
+
+  swagger-ui:
+    enable: true
+    theme: original
+
+  datasource:
+    jdbc: false
+    db-kind: mssql
+    username: SA
+    password: Quarkus123
+    reactive:
+      url: vertx-reactive:sqlserver://localhost:1433?encrypt=false;trustServerCertificate=true;
+      max-size: 40
+    devservices:
+      enabled: true
+      image-name: mcr.microsoft.com/azure-sql-edge:latest
+      port: 1433
+
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql: true
+      format-sql: true
+      bind-parameters: true
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    sql-load-script: animals.sql
+
+  log:
+    min-level: TRACE
