@@ -28,12 +28,19 @@ public class ZooResource {
 
     final AnimalsDto summary = new AnimalsDto();
 
-    return Uni.combine().all().unis(dogs, cats, rats, dolphins).asTuple().map(animal -> {
-      summary.setDogs(animal.getItem1());
-      summary.setCats(animal.getItem2());
-      summary.setRats(animal.getItem3());
-      summary.setDolphins(animal.getItem4());
-      return summary;
-    });
+    // recognized problems with this approach: https://github.com/quarkusio/quarkus/issues/28808
+    //    return Uni.combine().all().unis(dogs, cats, rats, dolphins).asTuple().map(animal -> {
+    //      summary.setDogs(animal.getItem1());
+    //      summary.setCats(animal.getItem2());
+    //      summary.setRats(animal.getItem3());
+    //      summary.setDolphins(animal.getItem4());
+    //      return summary;
+    //    });
+
+    return dogs.invoke(summary::setDogs)
+        .chain(() -> cats.invoke(summary::setCats))
+        .chain(() -> rats.invoke(summary::setRats))
+        .chain(() -> dolphins.invoke(summary::setDolphins))
+        .replaceWith(summary);
   }
 }
