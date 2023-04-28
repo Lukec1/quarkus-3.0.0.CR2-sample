@@ -23,24 +23,23 @@ public class ZooRepository implements PanacheRepositoryBase<AnimalEntity, Long> 
   private final AnimalEntityMapper animalEntityMapper;
 
   private Uni<List<AnimalEntity>> getAnimals(String ownerId, AnimalType animalType) {
-    return find("ownerId = ?1 AND animalType = ?2", ownerId, animalType).list().log();
-//    return list("ownerId = ?1 AND animalType = ?2", ownerId, animalType).log()
-//        .onItem()
-//        .invoke(
-//            result ->
-//                log.debug(
-//                    "Found {} entities for parameters '{}' - '{}'",
-//                    result.size(),
-//                    ownerId,
-//                    animalType))
-//        .onFailure()
-//        .invoke(
-//            throwable ->
-//                log.error(
-//                    "Error while getting accounts for parameters '{}' - '{}'",
-//                    ownerId,
-//                    animalType,
-//                    throwable));
+    return list("ownerId = ?1 AND animalType = ?2", ownerId, animalType).log()
+        .onItem()
+        .invoke(
+            result ->
+                log.debug(
+                    "Found {} entities for parameters '{}' - '{}'",
+                    result.size(),
+                    ownerId,
+                    animalType))
+        .onFailure()
+        .invoke(
+            throwable ->
+                log.error(
+                    "Error while getting accounts for parameters '{}' - '{}'",
+                    ownerId,
+                    animalType,
+                    throwable));
   }
 
   @WithSession
